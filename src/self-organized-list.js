@@ -65,35 +65,78 @@ class SelfOrganizedList{
     }
 
     removeAt(index) {
-        var i = 1;
+        var i = 0;
         var temp = this.head;
-        if(index == 1){
-            var head = this.head;
+        if(index > this.length){
+            return null;
+        }
+        if(this.length == 1 || this.length == 0){
+            this.length = 0;
+            this.head = null;
+            this.tail = null;
+            return;
+        }
+        if(index == 0){
             this.head = this.head.next;
+            this.head.prev = null;
+            this.length--;
             return;
         }
         while(i != index){
             temp = temp.next;
             i++;
         }
-        if(temp == tail){
-            var tail = this.tail;
+        if(temp == this.tail){
             this.tail = this.tail.prev;
+            this.tail.next = null
+            this.length--;
             return;
         }
         var prev = temp.prev;
         var next = temp.next;
         prev.next = next;
         next.prev = prev;
+        temp = null;
         this.length--;
+        return;
     }
 
     moveToFront(node) {
-
+        var temp = this.head;
+        while(temp != node){
+            temp = temp.next;
+        }
+        if(this.head == node){
+            return;
+        }
+        if(temp == this.tail){
+            this.tail = this.tail.prev;
+            this.tail.next = null;
+            this.head.prev = temp;
+            temp.next = this.head;
+            this.head = temp;
+            return;
+        }
+        var prev = temp.prev;
+        var next = temp.next;
+        prev.next = next;
+        next.prev = prev;
+        temp.next = this.head;
+        temp.prev = null;
+        this.head.prev = temp;
+        this.head = temp;      
     }
 
     reorganize(data) {
-
+        var temp = this.head;
+        while(temp != null){
+            if(temp.data == data){
+                this.moveToFront(temp);
+                return true;
+            }
+            temp = temp.next;
+        }
+        return false;
     }
 }
 
